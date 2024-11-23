@@ -1,11 +1,8 @@
-#!/usr/bin/python
-# -*- coding: utf-8 -*-
-
 import pygame.image
 from pygame import Surface, Rect
 from pygame.font import Font
+from code.Const import WIN_WIDTH, MENU_OPTION, COLOR_WHITE, COLOR_YELLOW, WIN_HEIGHT
 
-from code.Const import WIN_WIDTH, COLOR_VIVIDSKYBLUE, MENU_OPTION, COLOR_WHITE, COLOR_YELLOW, COLOR_BLACK, WIN_HEIGHT
 
 class Menu:
     """
@@ -71,19 +68,19 @@ class Menu:
             textRect = self.getTextRect(20, option, ((WIN_WIDTH / 2), 200 + 25 * i))
             if textRect.collidepoint(mousePos):
                 menuOption = i
-                if pygame.mouse.get_pressed()[0]:  # Mouse click
+                if pygame.mouse.get_pressed()[0]:
                     selectedOption = MENU_OPTION[menuOption]
 
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
-                pygame.quit()  # Fechar Janela
-                quit()  # Encerrar pygame
+                pygame.quit()
+                quit()
             if event.type == pygame.KEYDOWN:
-                if event.key == pygame.K_DOWN:  # Tecla DOWN
+                if event.key == pygame.K_DOWN:
                     menuOption = (menuOption + 1) % len(MENU_OPTION)
-                if event.key == pygame.K_UP:  # Tecla UP
+                if event.key == pygame.K_UP:
                     menuOption = (menuOption - 1) % len(MENU_OPTION)
-                if event.key == pygame.K_RETURN:  # ENTER
+                if event.key == pygame.K_RETURN:
                     selectedOption = MENU_OPTION[menuOption]
 
         return menuOption, selectedOption
@@ -105,14 +102,4 @@ class Menu:
         textSurf: Surface = textFont.render(text, True, textColor).convert_alpha()
         textRect: Rect = textSurf.get_rect(center=textCenterPos)
         self.window.blit(source=textSurf, dest=textRect)
-
-
-# Exemplo de inicialização do pygame e execução do menu
-if __name__ == "__main__":
-    pygame.init()
-    screen = pygame.display.set_mode((WIN_WIDTH, WIN_HEIGHT))
-    pygame.display.set_caption("Menu Example")
-    menu = Menu(screen)
-    selectedOption = menu.run()
-    print(f"Option selected: {selectedOption}")
-    pygame.quit()
+        return textRect
