@@ -16,7 +16,7 @@ class Game:
         """
         running = True
         while running:
-            self.window.fill((0 , 0 , 0))  # Placeholder for game screen
+            self.window.fill((0 , 0 , 0))
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
                     pygame.quit()
