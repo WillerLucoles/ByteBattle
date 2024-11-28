@@ -1,7 +1,7 @@
-import pygame.image
+import pygame
 from pygame import Surface, Rect
 from pygame.font import Font
-from code.Const import WIN_WIDTH, MENU_OPTION, COLOR_WHITE, COLOR_YELLOW, WIN_HEIGHT
+from code.Const import WIN_WIDTH, WIN_HEIGHT, MENU_OPTION, COLOR_WHITE, COLOR_YELLOW, SOUND_MENU
 
 
 class Menu:
@@ -26,7 +26,7 @@ class Menu:
         Main loop for the menu, handles rendering and input.
         """
         menuOption = 0
-        pygame.mixer_music.load('../asset/Backgrounds/Bg_Menu_Sound.mp3')
+        pygame.mixer_music.load(SOUND_MENU)
         pygame.mixer_music.play(-1)
         while True:
             self.drawMenu(menuOption)
@@ -38,23 +38,23 @@ class Menu:
         """
         Draw the menu options on the screen.
         """
-        self.window.blit(source=self.surf, dest=self.rect)
+        self.window.blit(self.surf, self.rect)
 
         # Draw the logo instead of "Byte Battle" text
-        self.window.blit(source=self.logo_surf, dest=self.logo_rect)
+        self.window.blit(self.logo_surf, self.logo_rect)
 
         for i, option in enumerate(MENU_OPTION):
             if i == menuOption:
                 # Draw a black transparent rectangle
                 rectSurf = pygame.Surface((200, 25), pygame.SRCALPHA)
                 rectSurf.fill((0, 0, 0, 128))  # Black with 50% transparency
-                rectRect = rectSurf.get_rect(center=((WIN_WIDTH / 2), 200 + 25 * i))
+                rectRect = rectSurf.get_rect(center=(WIN_WIDTH / 2, 200 + 25 * i))
                 self.window.blit(rectSurf, rectRect)
 
                 # Draw the text in yellow
-                self.menuText(20, option, COLOR_YELLOW, ((WIN_WIDTH / 2), 200 + 25 * i))
+                self.menuText(20, option, COLOR_YELLOW, (WIN_WIDTH / 2, 200 + 25 * i))
             else:
-                self.menuText(20, option, COLOR_WHITE, ((WIN_WIDTH / 2), 200 + 25 * i))
+                self.menuText(20, option, COLOR_WHITE, (WIN_WIDTH / 2, 200 + 25 * i))
         pygame.display.flip()
 
     def handleEvents(self, menuOption):
@@ -65,7 +65,7 @@ class Menu:
         selectedOption = None
 
         for i, option in enumerate(MENU_OPTION):
-            textRect = self.getTextRect(20, option, ((WIN_WIDTH / 2), 200 + 25 * i))
+            textRect = self.getTextRect(20, option, (WIN_WIDTH / 2, 200 + 25 * i))
             if textRect.collidepoint(mousePos):
                 menuOption = i
                 if pygame.mouse.get_pressed()[0]:
@@ -89,17 +89,15 @@ class Menu:
         """
         Get the rect for the text.
         """
-        textFont: Font = pygame.font.SysFont(name="Lucida Sans Typewriter", size=textSize)
-        textSurf: Surface = textFont.render(text, True, COLOR_WHITE).convert_alpha()
-        textRect: Rect = textSurf.get_rect(center=textCenterPos)
-        return textRect
+        textFont = pygame.font.SysFont(name="Lucida Sans Typewriter", size=textSize)
+        textSurf = textFont.render(text, True, COLOR_WHITE).convert_alpha()
+        return textSurf.get_rect(center=textCenterPos)
 
     def menuText(self, textSize: int, text: str, textColor: tuple, textCenterPos: tuple):
         """
         Render text on the menu.
         """
-        textFont: Font = pygame.font.SysFont(name="Lucida Sans Typewriter", size=textSize)
-        textSurf: Surface = textFont.render(text, True, textColor).convert_alpha()
-        textRect: Rect = textSurf.get_rect(center=textCenterPos)
-        self.window.blit(source=textSurf, dest=textRect)
-        return textRect
+        textFont = pygame.font.SysFont(name="Lucida Sans Typewriter", size=textSize)
+        textSurf = textFont.render(text, True, textColor).convert_alpha()
+        textRect = textSurf.get_rect(center=textCenterPos)
+        self.window.blit(textSurf, textRect)
