@@ -4,7 +4,6 @@ from code.Entity import Entity
 from code.EntityFactory import EntityFactory
 from code.Player import Player
 from pygame import Surface , Rect
-
 from pygame.font import Font
 
 
@@ -16,9 +15,22 @@ class Level:
         self.game_mode = game_mode
         self.entity_list: list[Entity] = EntityFactory.get_entity("Fase_1")
 
-        # Inicializar o jogador
-        self.player = Player("player1" , (10 , WIN_HEIGHT/2))
+        # Inicializar jogadores com base no modo de jogo
+        self.player1 = Player("player1" , (10 , WIN_HEIGHT/2) , controls={
+            'up': pygame.K_w ,
+            'down': pygame.K_s ,
+            'left': pygame.K_a ,
+            'right': pygame.K_d
+        })
 
+        self.player2 = None  # Somente criado no modo competitivo
+        if self.game_mode == "NEW GAME 2P":
+            self.player2 = Player("player2" , (10 , WIN_HEIGHT/2.6) , controls={
+                'up': pygame.K_UP ,
+                'down': pygame.K_DOWN ,
+                'left': pygame.K_LEFT ,
+                'right': pygame.K_RIGHT
+            })
 
     def run(self):
         """Loop principal do nível."""
@@ -38,16 +50,21 @@ class Level:
                 ent.move()
                 self.window.blit(ent.surf , ent.rect)
 
-            # Desenha o Player na tela
-            self.player.move()
-            self.window.blit(self.player.surf , self.player.rect)
+            # Atualizar e desenhar Player 1
+            self.player1.move()
+            self.window.blit(self.player1.surf , self.player1.rect)
+
+            # Atualizar e desenhar Player 2
+            if self.player2:
+                self.player2.move()
+                self.window.blit(self.player2.surf , self.player2.rect)
 
             # Exibe informações do nível
             self._render_text(14 , f'{self.name} - Timeout: {self.timeout / 1000:.1f}s' , COLOR_WHITE , (10 , 5))
             self._render_text(14 , f'FPS: {clock.get_fps():.0f}' , COLOR_WHITE , (10 , WIN_HEIGHT - 35))
             self._render_text(14 , f'Entidades: {len(self.entity_list)}' , COLOR_WHITE , (10 , WIN_HEIGHT - 20))
 
-            pygame.display.flip()  # Atualiza a tela
+            pygame.display.flip()
 
             # Processa eventos
             for event in pygame.event.get():
