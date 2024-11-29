@@ -1,4 +1,6 @@
 import pygame
+
+from code.Const import WIN_WIDTH , WIN_HEIGHT
 from code.Entity import Entity
 
 class Player(Entity):
@@ -24,4 +26,4 @@ class Player(Entity):
             self.rect.centerx += self.speed
 
         # Limitar o Player para que não saia da tela
-        self.rect.clamp_ip(pygame.Rect(0, 0, 576, 354))  # Substitua os valores pelo tamanho da sua janela
+        self.rect.clamp_ip(pygame.Rect(0, 0, WIN_WIDTH, WIN_HEIGHT))

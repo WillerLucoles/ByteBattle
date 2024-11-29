@@ -29,6 +29,8 @@ ENTITY_SPEED = {
     'City1_Bg2': 2,
     'City1_Bg3': 3,
     'City1_Bg4': 4,
+    "Player1": 5,
+    "Player2": 5,
 }
 
 # Opcoes de Timed
