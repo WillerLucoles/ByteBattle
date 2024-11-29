@@ -3,6 +3,8 @@ COLOR_VIVIDSKYBLUE = (85, 205, 241)
 COLOR_WHITE = (255, 255, 255)
 COLOR_YELLOW = (255, 255, 0)
 COLOR_BLACK = (0, 0, 0)
+COLOR_GREEN = (0, 128, 0)
+COLOR_CYAN = (0, 128, 128)
 
 # Opções do menu principal
 MENU_OPTION = ('NEW GAME 1P', 'NEW GAME 2P', 'SCORE', 'EXIT')
@@ -28,3 +30,7 @@ ENTITY_SPEED = {
     'City1_Bg3': 3,
     'City1_Bg4': 4,
 }
+
+# Opcoes de Timed
+TIMEOUT_STEP = 100  # 100ms
+TIMEOUT_LEVEL = 20000  # 20s
