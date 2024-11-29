@@ -1,18 +1,19 @@
-#!/usr/bin/python
-# -*- coding: utf-8 -*-
+import pygame
 from abc import ABC, abstractmethod
 
-import pygame.image
+from code.Const import ENTITY_SPEED
 
 
 class Entity(ABC):
-    def __init__(self, name: str, position: tuple):
+    def __init__(self, name: str, position: tuple, path: str = '../asset/Backgrounds/Level/'):
         self.name = name
-        self.surf = pygame.image.load('./asset/' + name + '.png')
+        try:
+            self.surf = pygame.image.load(path + name + '.png')  # Carrega a imagem do caminho especificado
+        except pygame.error as e:
+            print(f"Error loading image for {name}: {e}")
         self.rect = self.surf.get_rect(left=position[0], top=position[1])
-        self.speed = 0
-
+        self.speed = ENTITY_SPEED
 
     @abstractmethod
-    def move(self):
+    def move(self, ):
         pass
