@@ -14,8 +14,8 @@ class Player(Entity):
         self.shot_direction = 1  # Direção do tiro
         self.shots = []
         self.shoot_cooldown = 300  # Cadência de tiro em milissegundos
-        self.last_shot_time = 0  # Última vez que o tiro foi disparado
-        self.health = ENTITY_HEALTH.get(name , 100)
+        self.last_shot_time = 0
+        self.health = ENTITY_HEALTH.get(name , 500)
 
     def move(self):
         """Atualiza a posição do Player com base nas teclas pressionadas."""
