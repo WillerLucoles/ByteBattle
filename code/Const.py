@@ -1,4 +1,6 @@
 # Cores usadas no jogo
+from typing import Dict , Any
+
 COLOR_VIVIDSKYBLUE = (85, 205, 241)
 COLOR_WHITE = (255, 255, 255)
 COLOR_YELLOW = (255, 255, 0)
@@ -31,6 +33,35 @@ ENTITY_SPEED = {
     'City1_Bg4': 4,
     "Player1": 5,
     "Player2": 5,
+    "Enemy1": 2,
+    "Enemy2": 3,
+    "Enemy3": 1,
+    "Enemy4": 2,
+    "Enemy5": 2,
+    "Enemy6": 3,
+}
+
+ENTITY_HEALTH: dict[str | Any, int | Any]={
+    'City1_Bg0': 999 ,
+    'City1_Bg1': 999 ,
+    'City1_Bg2': 999 ,
+    'City1_Bg3': 999 ,
+    'City1_Bg4': 999 ,
+    "Player1": 600 ,
+    "Player2": 600 ,
+    "Enemy1": 10,
+    "Enemy2": 20,
+    "Enemy3": 10,
+    "Enemy4": 20,
+    "Enemy5":30,
+    "Enemy6": 20,
+
+}
+
+SHOT_SPRITES = {
+    "Player1": "Player1Shot",
+    "Player2": "Player2Shot",
+    "Enemy": "EnemyShot"
 }
 
 # Opcoes de Timed

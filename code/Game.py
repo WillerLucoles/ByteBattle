@@ -14,12 +14,12 @@ class Game:
     def start_new_game(self):
         running = True
         while running:
-            self.window.fill((0, 0, 0))  # Preenche a tela com a cor preta
+            self.window.fill((0, 0, 0))
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
                     pygame.quit()
                     return "quit"
-            pygame.display.flip()  # Atualiza a tela
+            pygame.display.flip()
             self.clock.tick(60)  # Limita a 60 FPS
 
     def run(self):
