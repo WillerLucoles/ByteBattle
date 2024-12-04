@@ -5,6 +5,8 @@ from code.EntityFactory import EntityFactory
 from code.Player import Player
 from pygame import Surface, Rect
 from pygame.font import Font
+from code.EntityMediator import EntityMediator
+
 
 
 class Level:
@@ -46,12 +48,18 @@ class Level:
 
         while running:
             clock.tick(60)
-            self.window.fill((0, 0, 0))  # Limpa a tela a cada iteração
+            self.window.fill((0, 0, 0))
 
-            # Atualizar e desenhar todas as entidades
+            # Atualizar e desenhar entidades
             for ent in self.entity_list:
                 ent.move()
-                self.window.blit(ent.surf, ent.rect)
+                self.window.blit(ent.surf , ent.rect)
+
+            # Verificar colisões com a janela
+            EntityMediator.verify_collision(self.enemies)
+
+            # Remover entidades com health <= 0
+            EntityMediator.verify_health(self.enemies)
 
             # Atualizar e desenhar Player 1
             self.player1.move()
@@ -71,7 +79,7 @@ class Level:
                     self.window.blit(enemy.surf, enemy.rect)
 
             # Garantir que o número de inimigos ativos não exceda o limite
-            if active_enemies < 4:  # Define o número máximo de inimigos ativos
+            if active_enemies < 4:
                 for enemy in self.enemies:
                     if not enemy.active:
                         enemy.activate()
@@ -81,6 +89,8 @@ class Level:
             self._render_text(14, f'{self.name} - Timeout: {self.timeout / 1000:.1f}s', COLOR_WHITE, (10, 5))
             self._render_text(14, f'FPS: {clock.get_fps():.0f}', COLOR_WHITE, (10, WIN_HEIGHT - 35))
             self._render_text(14, f'Entidades: {len(self.entity_list)}', COLOR_WHITE, (10, WIN_HEIGHT - 20))
+            #self._render_text(14 , f'Inimigos Ativos: {len(self.enemies)}' , COLOR_WHITE , (10 , WIN_HEIGHT - 50))
+            #print(f"[DEBUG] Remaining enemies: {[enemy.name for enemy in self.enemies]}")
 
             pygame.display.flip()
 
