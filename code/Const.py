@@ -47,15 +47,21 @@ ENTITY_HEALTH: dict[str | Any, int | Any]={
     'City1_Bg2': 999 ,
     'City1_Bg3': 999 ,
     'City1_Bg4': 999 ,
-    "Player1": 500 ,
-    "Player2": 500 ,
-    "Enemy1": 20,
-    "Enemy2": 25,
-    "Enemy3": 30,
-    "Enemy4": 35,
-    "Enemy5": 40,
-    "Enemy6": 45,
+    "Player1": 600 ,
+    "Player2": 600 ,
+    "Enemy1": 10,
+    "Enemy2": 20,
+    "Enemy3": 10,
+    "Enemy4": 20,
+    "Enemy5":30,
+    "Enemy6": 20,
 
+}
+
+SHOT_SPRITES = {
+    "Player1": "Player1Shot",
+    "Player2": "Player2Shot",
+    "Enemy": "EnemyShot"
 }
 
 # Opcoes de Timed

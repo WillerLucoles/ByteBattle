@@ -48,49 +48,62 @@ class Level:
 
         while running:
             clock.tick(60)
-            self.window.fill((0, 0, 0))
+            self.window.fill((0 , 0 , 0))
 
-            # Atualizar e desenhar entidades
+            current_time = pygame.time.get_ticks()
+
+            # Atualizar e desenhar entidades (Background, etc.)
             for ent in self.entity_list:
                 ent.move()
                 self.window.blit(ent.surf , ent.rect)
 
-            # Verificar colisões com a janela
-            EntityMediator.verify_collision(self.enemies)
-
-            # Remover entidades com health <= 0
-            EntityMediator.verify_health(self.enemies)
+            # Verificar e recriar inimigos se necessário
+            EntityMediator.verify_health(self.entity_list , self.enemies)
 
             # Atualizar e desenhar Player 1
             self.player1.move()
-            self.window.blit(self.player1.surf, self.player1.rect)
+            self.player1.shoot(current_time)  # Player 1 dispara automaticamente
+            self.window.blit(self.player1.surf , self.player1.rect)
+            for shot in self.player1.shots:
+                shot.move()
+                self.window.blit(shot.surf , shot.rect)
 
             # Atualizar e desenhar Player 2
             if self.player2:
                 self.player2.move()
-                self.window.blit(self.player2.surf, self.player2.rect)
+                self.player2.shoot(current_time)  # Player 2 dispara automaticamente
+                self.window.blit(self.player2.surf , self.player2.rect)
+                for shot in self.player2.shots:
+                    shot.move()
+                    self.window.blit(shot.surf , shot.rect)
 
             # Atualizar e desenhar inimigos
-            active_enemies = 0
             for enemy in self.enemies:
                 enemy.move()
-                if enemy.active:
-                    active_enemies += 1
-                    self.window.blit(enemy.surf, enemy.rect)
+                enemy.shoot(current_time)  # Enemies disparam automaticamente
+                self.window.blit(enemy.surf , enemy.rect)
+                for shot in enemy.shots:
+                    shot.move()
+                    self.window.blit(shot.surf , shot.rect)
 
-            # Garantir que o número de inimigos ativos não exceda o limite
-            if active_enemies < 4:
-                for enemy in self.enemies:
-                    if not enemy.active:
-                        enemy.activate()
-                        break
+            # Verificar colisões entre tiros e entidades
+            EntityMediator.check_shot_collisions(self.player1.shots , self.enemies)
+            if self.player2:
+                EntityMediator.check_shot_collisions(self.player2.shots , self.enemies)
+            for enemy in self.enemies:
+                EntityMediator.check_shot_collisions(enemy.shots ,
+                                                     [self.player1 , self.player2] if self.player2 else [self.player1])
+
+            # Verificar se algum jogador morreu
+            if self.player1.health <= 0 or (self.player2 and self.player2.health <= 0):
+                print("[DEBUG] Game over due to player health reaching zero!")
+                running = False
+                break
 
             # Exibe informações do nível
-            self._render_text(14, f'{self.name} - Timeout: {self.timeout / 1000:.1f}s', COLOR_WHITE, (10, 5))
-            self._render_text(14, f'FPS: {clock.get_fps():.0f}', COLOR_WHITE, (10, WIN_HEIGHT - 35))
-            self._render_text(14, f'Entidades: {len(self.entity_list)}', COLOR_WHITE, (10, WIN_HEIGHT - 20))
-            #self._render_text(14 , f'Inimigos Ativos: {len(self.enemies)}' , COLOR_WHITE , (10 , WIN_HEIGHT - 50))
-            #print(f"[DEBUG] Remaining enemies: {[enemy.name for enemy in self.enemies]}")
+            self._render_text(14 , f'{self.name} - Timeout: {self.timeout / 1000:.1f}s' , COLOR_WHITE , (10 , 5))
+            self._render_text(14 , f'FPS: {clock.get_fps():.0f}' , COLOR_WHITE , (10 , WIN_HEIGHT - 35))
+            self._render_text(14 , f'Entidades: {len(self.entity_list)}' , COLOR_WHITE , (10 , WIN_HEIGHT - 20))
 
             pygame.display.flip()
 
