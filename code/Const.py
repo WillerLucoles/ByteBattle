@@ -64,6 +64,16 @@ SHOT_SPRITES = {
     "Enemy": "EnemyShot"
 }
 
+# Pontuações de inimigos
+entity_Score = {
+    "Enemy1": 100,
+    "Enemy2": 200,
+    "Enemy3": 150,
+    "Enemy4": 250,
+    "Enemy5": 300,
+    "Enemy6": 400
+}
+
 # Opcoes de Timed
 TIMEOUT_STEP = 100  # 100ms
 TIMEOUT_LEVEL = 20000  # 20s

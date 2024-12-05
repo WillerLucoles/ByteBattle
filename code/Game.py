@@ -20,7 +20,7 @@ class Game:
                     pygame.quit()
                     return "quit"
             pygame.display.flip()
-            self.clock.tick(60)  # Limita a 60 FPS
+            self.clock.tick(60)
 
     def run(self):
         while True:
@@ -32,7 +32,6 @@ class Game:
             if menu_return in [MENU_OPTION[0], MENU_OPTION[1]]:  # "NEW GAME 1P" ou "NEW GAME 2P"
                 print("Initializing level...")
 
-                # Diagnóstico para verificar se o Level está sendo instanciado
                 try:
                     level = Level(self.window, "Level 1", menu_return)
                     print(f"Level initialized: {level}")  # Confirma se o nível foi instanciado
@@ -41,13 +40,12 @@ class Game:
 
                 level_return = level.run()
 
-                print("Starting new game...")
-                game_status = self.start_new_game()
-                if game_status == "quit":
-                    break
-
                 if level_return == "quit":
                     break
+
+                if level_return == "menu":  # Se a opção for "Cancel", volta para o menu
+                    print("Returning to main menu...")
+                    continue
 
             elif menu_return == MENU_OPTION[3]:  # "EXIT"
                 pygame.quit()
