@@ -2,7 +2,7 @@ from cx_Freeze import setup, Executable
 import os
 
 
-assets_folder = './assets'
+asset_folder = './asset/'
 
 setup(
     name="Byte Battle",
@@ -12,7 +12,7 @@ setup(
     options={
         "build_exe": {
             "packages": ["pygame", "sqlite3"],
-            "include_files": [assets_folder],
+            "include_files": [asset_folder],
             "optimize": 2,
         }
     }
