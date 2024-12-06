@@ -16,20 +16,19 @@ class Level:
         self.name = name
         self.game_mode = game_mode
         self.entity_list: list[Entity] = EntityFactory.get_entity("Fase_1")
-        self.db = DBProxy()  # Inicializar banco de dados
+        self.db = DBProxy()
+        self.reset_level()
 
-
-        # Inicializar jogadores com base no modo de jogo
         self.player1 = Player("player1", (10, WIN_HEIGHT / 2), controls={
             'up': pygame.K_w,
             'down': pygame.K_s,
             'left': pygame.K_a,
             'right': pygame.K_d
         })
-        self.player1_score = 0  # Score do Player 1
+        self.player1_score = 0
 
-        self.player2 = None  # Criar no modo competitivo
-        self.player2_score = 0  # Score do Player 2
+        self.player2 = None
+        self.player2_score = 0
         if self.game_mode == "NEW GAME 2P":
             self.player2 = Player("player2", (10, WIN_HEIGHT / 2.6), controls={
                 'up': pygame.K_UP,
@@ -38,24 +37,44 @@ class Level:
                 'right': pygame.K_RIGHT
             })
 
-        # Inimigos
         self.enemies = EntityFactory.get_entity("Enemies")
 
+    def reset_level(self):
+            self.timeout = TIMEOUT_LEVEL
+            self.entity_list = EntityFactory.get_entity("Fase_1")
+            self.player1 = Player("player1" , (10 , WIN_HEIGHT / 2) , controls={
+                'up': pygame.K_w ,
+                'down': pygame.K_s ,
+                'left': pygame.K_a ,
+                'right': pygame.K_d
+            })
+            self.player1_score = 0
+
+            self.player2 = None
+            self.player2_score = 0
+            if self.game_mode == "NEW GAME 2P":
+                self.player2 = Player("player2" , (10 , WIN_HEIGHT / 2.6) , controls={
+                    'up': pygame.K_UP ,
+                    'down': pygame.K_DOWN ,
+                    'left': pygame.K_LEFT ,
+                    'right': pygame.K_RIGHT
+                })
+
+            self.enemies = EntityFactory.get_entity("Enemies")
+
     def update_score(self, player, target):
-        """Atualiza o score do jogador ao destruir um inimigo."""
         normalized_name = target.name.capitalize()
-        points = entity_Score.get(normalized_name, 0)  # Pontuação baseada no inimigo
+        points = entity_Score.get(normalized_name, 0)
         if player == "player1":
             self.player1_score += points
         elif player == "player2":
             self.player2_score += points
 
     def end_game_screen(self, message, players_scores):
-        """Exibe a tela final (vitória ou derrota) e solicita os nomes."""
         running = True
         font = pygame.font.SysFont("Lucida Sans Typewriter", 30)
-        input_boxes = []  # Campos para entrada de nomes
-        names = []  # Armazena os nomes inseridos
+        input_boxes = []
+        names = []
 
         for i, player in enumerate(players_scores.keys()):
             rect = pygame.Rect(WIN_WIDTH // 2 - 100, WIN_HEIGHT // 2 + i * 50, 200, 30)
@@ -63,13 +82,10 @@ class Level:
 
         while running:
             self.window.fill((0, 0, 0))
-
-            # Exibe a mensagem de vitória ou derrota
             title_surf = font.render(message, True, COLOR_WHITE)
             title_rect = title_surf.get_rect(center=(WIN_WIDTH // 2, WIN_HEIGHT // 4))
             self.window.blit(title_surf, title_rect)
 
-            # Exibe os campos para nomes
             for i, box in enumerate(input_boxes):
                 label = f"{list(players_scores.keys())[i]}: {box['text']}"
                 text = font.render(label, True, COLOR_WHITE)
@@ -105,77 +121,79 @@ class Level:
 
         return "menu"
 
-    def run(self, start_time=1):
-        """Loop principal do nível."""
+    def run(self , start_time=1):
+        self.reset_level()
+
         pygame.mixer_music.load('./asset/Backgrounds/Level/SomLevel1.mp3')
         pygame.mixer_music.set_volume(0.3)
         pygame.mixer_music.play(-1)
+        start_time = pygame.time.get_ticks()
 
         clock = pygame.time.Clock()
         running = True
 
         while running:
             clock.tick(60)
-            self.window.fill((0, 0, 0))  # Limpa a tela
+            self.window.fill((0 , 0 , 0))
 
             current_time = pygame.time.get_ticks()
             elapsed_time = (current_time - start_time) / 1000
-            remaining_time = max(0, self.timeout / 1000 - elapsed_time)
+            remaining_time = max(0 , self.timeout / 1000 - elapsed_time)
 
             if remaining_time <= 0:
                 players_scores = {"Player 1": self.player1_score}
                 if self.player2:
                     players_scores["Player 2"] = self.player2_score
-                return self.end_game_screen("YOU WIN!", players_scores)
+                    print("Time's up! Showing end game screen.")
+                return self.end_game_screen("YOU WIN!" , players_scores)
 
-            # Atualizar e renderizar entidades
             for ent in self.entity_list:
                 ent.move()
-                self.window.blit(ent.surf, ent.rect)
+                self.window.blit(ent.surf , ent.rect)
 
-            EntityMediator.verify_health(self.entity_list, self.enemies)
+            EntityMediator.verify_health(self.entity_list , self.enemies)
 
             self.player1.move()
             self.player1.shoot(current_time)
-            self.window.blit(self.player1.surf, self.player1.rect)
+            self.window.blit(self.player1.surf , self.player1.rect)
             for shot in self.player1.shots:
                 shot.move()
                 for enemy in self.enemies:
                     if shot.rect.colliderect(enemy.rect):
-                        self.update_score("player1", enemy)
+                        self.update_score("player1" , enemy)
                         enemy.health = 0
                         if shot in self.player1.shots:
                             self.player1.shots.remove(shot)
-                self.window.blit(shot.surf, shot.rect)
+                self.window.blit(shot.surf , shot.rect)
 
             if self.player2:
                 self.player2.move()
                 self.player2.shoot(current_time)
-                self.window.blit(self.player2.surf, self.player2.rect)
+                self.window.blit(self.player2.surf , self.player2.rect)
                 for shot in self.player2.shots:
                     shot.move()
                     for enemy in self.enemies:
                         if shot.rect.colliderect(enemy.rect):
-                            self.update_score("player2", enemy)
+                            self.update_score("player2" , enemy)
                             enemy.health = 0
                             if shot in self.player2.shots:
                                 self.player2.shots.remove(shot)
-                    self.window.blit(shot.surf, shot.rect)
+                    self.window.blit(shot.surf , shot.rect)
 
             for enemy in self.enemies:
                 enemy.move()
                 enemy.shoot(current_time)
-                self.window.blit(enemy.surf, enemy.rect)
+                self.window.blit(enemy.surf , enemy.rect)
                 for shot in enemy.shots:
                     shot.move()
-                    self.window.blit(shot.surf, shot.rect)
+                    self.window.blit(shot.surf , shot.rect)
 
-            self._render_text(16, f"Level 1 - Timeout: {remaining_time:.1f}s", COLOR_WHITE, (10, 10))
-            self._render_text(16, f"Player 1 - Health: {self.player1.health} | Score: {self.player1_score}",
-                              COLOR_VIVIDSKYBLUE, (10, 25))
+            self._render_text(16 , f"Level 1 - Timeout: {remaining_time:.1f}s" , COLOR_WHITE , (10 , 10))
+            self._render_text(16 , f"Player 1 - Health: {self.player1.health} | Score: {self.player1_score}" ,
+                              COLOR_VIVIDSKYBLUE , (10 , 25))
             if self.player2:
-                self._render_text(16, f"Player 2 - Health: {self.player2.health} | Score: {self.player2_score}",
-                                  COLOR_YELLOW, (10, 40))
+                self._render_text(16 , f"Player 2 - Health: {self.player2.health} | Score: {self.player2_score}" ,
+                                  COLOR_YELLOW , (10 , 40))
 
             pygame.display.flip()
 
@@ -195,6 +213,7 @@ class Level:
                             return "quit"
 
         return "exit"
+
 
     def _render_text(self, size: int, text: str, color: tuple, position: tuple):
         font: Font = pygame.font.SysFont("Lucida Sans Typewriter", size)

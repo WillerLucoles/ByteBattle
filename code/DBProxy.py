@@ -36,6 +36,12 @@ class DBProxy:
         self.cursor.execute("DELETE FROM scores")
         self.connection.commit()
 
+    def reset_scores(self):
+        """Apaga a tabela de pontuações e a recria."""
+        self.cursor.execute("DROP TABLE IF EXISTS scores")
+        self.create_table()  # Recria a tabela
+        self.connection.commit()
+
     def close(self):
         """Fecha a conexão com o banco de dados."""
         self.connection.close()

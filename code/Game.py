@@ -27,28 +27,28 @@ class Game:
             print("Entering menu...")
             menu = Menu(self.window)
             menu_return = menu.run()
-            print(f"Menu option selected: {menu_return}")  # Verifica qual opção foi escolhida
+            print(f"Menu option selected: {menu_return}")
 
-            if menu_return in ["NEW GAME 1P" , "NEW GAME 2P"]:  # "NEW GAME 1P" ou "NEW GAME 2P"
+            if menu_return in ["NEW GAME 1P", "NEW GAME 2P"]:
                 print("Initializing level...")
 
                 try:
-                    level = Level(self.window , "Level 1" , menu_return)  # Nova instância do level
+                    level = Level(self.window, "Level 1", menu_return)
                     print(f"Level initialized: {level}")
                 except Exception as e:
                     print(f"Error initializing level: {e}")
-                    continue  # Retorna ao menu caso ocorra erro ao inicializar o level
+                    continue
 
-                level_return = level.run()  # Executa o nível
+                level_return = level.run()
 
-                if level_return == "quit":  # Se o jogador quiser sair
+                if level_return == "quit":
                     break
 
-                if level_return == "menu":  # Se o jogador terminar o level e voltar ao menu
+                if level_return == "menu":
                     print("Returning to main menu...")
-                    continue  # Reinicia o loop, levando o jogador de volta ao menu inicial
+                    continue
 
-            elif menu_return == "EXIT":  # Caso o jogador selecione EXIT
+            elif menu_return == "EXIT":
                 pygame.quit()
                 break
 
