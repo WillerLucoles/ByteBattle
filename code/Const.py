@@ -1,4 +1,4 @@
-# Cores usadas no jogo
+
 from typing import Dict , Any
 
 COLOR_VIVIDSKYBLUE = (85, 205, 241)
@@ -13,7 +13,7 @@ MENU_OPTION = ('NEW GAME 1P', 'NEW GAME 2P', 'SCORE', 'EXIT')
 
 # Dimensões da janela do jogo
 WIN_WIDTH = 576
-WIN_HEIGHT = 354
+WIN_HEIGHT = 330
 WIN_CENTER = (WIN_WIDTH // 2, WIN_HEIGHT // 2)
 
 # Fontes padrão
@@ -22,7 +22,7 @@ FONT_SIZE_LARGE = 20
 FONT_SIZE_SMALL = 12
 
 # Sons do jogo
-SOUND_MENU = "../asset/Backgrounds/Bg_Menu_Sound.mp3"
+SOUND_MENU = "./asset/Backgrounds/Bg_Menu_Sound.mp3"
 
 #Background do Level1
 ENTITY_SPEED = {
@@ -64,6 +64,16 @@ SHOT_SPRITES = {
     "Enemy": "EnemyShot"
 }
 
+# Pontuações de inimigos
+entity_Score = {
+    "Enemy1": 100,
+    "Enemy2": 200,
+    "Enemy3": 150,
+    "Enemy4": 250,
+    "Enemy5": 300,
+    "Enemy6": 400
+}
+
 # Opcoes de Timed
 TIMEOUT_STEP = 100  # 100ms
-TIMEOUT_LEVEL = 20000  # 20s
+TIMEOUT_LEVEL = 40000  # 40s

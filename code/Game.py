@@ -20,39 +20,37 @@ class Game:
                     pygame.quit()
                     return "quit"
             pygame.display.flip()
-            self.clock.tick(60)  # Limita a 60 FPS
+            self.clock.tick(60)
 
     def run(self):
         while True:
             print("Entering menu...")
             menu = Menu(self.window)
             menu_return = menu.run()
-            print(f"Menu option selected: {menu_return}")  # Verifica qual opção foi escolhida
+            print(f"Menu option selected: {menu_return}")
 
-            if menu_return in [MENU_OPTION[0], MENU_OPTION[1]]:  # "NEW GAME 1P" ou "NEW GAME 2P"
+            if menu_return in ["NEW GAME 1P", "NEW GAME 2P"]:
                 print("Initializing level...")
 
-                # Diagnóstico para verificar se o Level está sendo instanciado
                 try:
                     level = Level(self.window, "Level 1", menu_return)
-                    print(f"Level initialized: {level}")  # Confirma se o nível foi instanciado
+                    print(f"Level initialized: {level}")
                 except Exception as e:
                     print(f"Error initializing level: {e}")
+                    continue
 
                 level_return = level.run()
-
-                print("Starting new game...")
-                game_status = self.start_new_game()
-                if game_status == "quit":
-                    break
 
                 if level_return == "quit":
                     break
 
-            elif menu_return == MENU_OPTION[3]:  # "EXIT"
+                if level_return == "menu":
+                    print("Returning to main menu...")
+                    continue
+
+            elif menu_return == "EXIT":
                 pygame.quit()
                 break
-
 
 if __name__ == "__main__":
     try:

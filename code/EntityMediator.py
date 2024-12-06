@@ -16,7 +16,7 @@ class EntityMediator:
         Se for um Enemy e sair pela esquerda, marca como 'morto'.
         """
         if isinstance(ent, Enemy) and ent.rect.right < 0:
-            ent.health = 0  # Marca como morto
+            ent.health = 0
 
     @staticmethod
     def verify_collision(entity_list: list[Entity]):
@@ -31,20 +31,20 @@ class EntityMediator:
         """
         Remove inimigos com health <= 0 ou que saíram da tela e cria novos inimigos.
         """
-        for ent in enemies:  # Iterar sobre a lista de inimigos
-            if ent.health <= 0 or ent.rect.right < 0:  # Inimigo destruído ou fora da tela
+        for ent in enemies:
+            if ent.health <= 0 or ent.rect.right < 0:
                 print(f"[DEBUG] Removing enemy: {ent.name} (Health: {ent.health})")
 
                 # Criar um novo tipo de inimigo aleatório
-                all_enemies = EntityFactory.get_entity("Enemies")  # Pega todos os tipos de inimigos
-                new_enemy = random.choice(all_enemies)  # Escolhe um tipo aleatório
+                all_enemies = EntityFactory.get_entity("Enemies")
+                new_enemy = random.choice(all_enemies)
 
                 # Configurar posição e velocidade para o novo inimigo
-                new_enemy.rect.x = WIN_WIDTH  # Posiciona o inimigo na borda direita
-                new_enemy.rect.y = random.randint(0 , WIN_HEIGHT - new_enemy.rect.height)  # Posição Y aleatória
+                new_enemy.rect.x = WIN_WIDTH
+                new_enemy.rect.y = random.randint(0 , WIN_HEIGHT - new_enemy.rect.height)
 
                 # Ajustar a velocidade com base na constante ENEMY_SPEED
-                new_enemy.speed = ENTITY_SPEED.get(new_enemy.name , 3)  # Pega a velocidade definida, padrão 3 se não encontrado
+                new_enemy.speed = ENTITY_SPEED.get(new_enemy.name , 3)
 
                 # Substituir o inimigo destruído pelo novo
                 enemies[enemies.index(ent)] = new_enemy
@@ -55,7 +55,7 @@ class EntityMediator:
         to_remove_shots = []
         for shot in shots[:]:
             for target in targets:
-                if shot.rect.colliderect(target.rect):  # Verifica colisão
+                if shot.rect.colliderect(target.rect):
                     #print(f"[DEBUG] Shot from {shot.name} hit {target.name}. Both shots are destroyed!")
                     to_remove_shots.append(shot)
                     target.health -= 10  # Reduz saúde da entidade atingida
