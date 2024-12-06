@@ -2,7 +2,6 @@ import pygame
 from code.Const import WIN_WIDTH, WIN_HEIGHT, MENU_OPTION
 from code.Menu import Menu
 from code.Level import Level
-from code.Score import Score
 
 
 class Game:
@@ -26,33 +25,32 @@ class Game:
     def run(self):
         while True:
             print("Entering menu...")
-            score= Score(self.window)
             menu = Menu(self.window)
             menu_return = menu.run()
             print(f"Menu option selected: {menu_return}")  # Verifica qual opção foi escolhida
 
-            if menu_return in [MENU_OPTION[0], MENU_OPTION[1]]:  # "NEW GAME 1P" ou "NEW GAME 2P"
+            if menu_return in ["NEW GAME 1P" , "NEW GAME 2P"]:  # "NEW GAME 1P" ou "NEW GAME 2P"
                 print("Initializing level...")
 
                 try:
-                    level = Level(self.window, "Level 1", menu_return)
+                    level = Level(self.window , "Level 1" , menu_return)  # Nova instância do level
                     print(f"Level initialized: {level}")
                 except Exception as e:
                     print(f"Error initializing level: {e}")
+                    continue  # Retorna ao menu caso ocorra erro ao inicializar o level
 
-                level_return = level.run()
+                level_return = level.run()  # Executa o nível
 
-                if level_return == "quit":
+                if level_return == "quit":  # Se o jogador quiser sair
                     break
 
-                if level_return == "menu":
+                if level_return == "menu":  # Se o jogador terminar o level e voltar ao menu
                     print("Returning to main menu...")
-                    continue
+                    continue  # Reinicia o loop, levando o jogador de volta ao menu inicial
 
-            elif menu_return == MENU_OPTION[3]:  # "EXIT"
+            elif menu_return == "EXIT":  # Caso o jogador selecione EXIT
                 pygame.quit()
                 break
-
 
 if __name__ == "__main__":
     try:

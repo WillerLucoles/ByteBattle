@@ -2,6 +2,7 @@ import pygame
 from pygame import Surface, Rect
 from pygame.font import Font
 from code.Const import WIN_WIDTH, WIN_HEIGHT, MENU_OPTION, COLOR_WHITE, COLOR_YELLOW, SOUND_MENU
+from code.Score import Score
 
 
 class Menu:
@@ -31,6 +32,10 @@ class Menu:
             self.drawMenu(menuOption)
             menuOption, selectedOption = self.handleEvents(menuOption)
             if selectedOption:
+                if selectedOption == "SCORE":
+                    score_screen = Score(self.window)
+                    score_screen.run()
+                    continue  # Retorna ao menu após a tela de scores
                 return selectedOption
 
     def drawMenu(self, menuOption):

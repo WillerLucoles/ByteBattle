@@ -1,12 +1,12 @@
 import pygame
-from code.Const import COLOR_WHITE , WIN_HEIGHT , TIMEOUT_LEVEL , WIN_WIDTH , entity_Score , COLOR_VIVIDSKYBLUE , \
-    COLOR_YELLOW
+from code.Const import COLOR_WHITE, WIN_HEIGHT, TIMEOUT_LEVEL, WIN_WIDTH, entity_Score, COLOR_VIVIDSKYBLUE, COLOR_YELLOW
 from code.Entity import Entity
 from code.EntityFactory import EntityFactory
 from code.Player import Player
 from pygame import Surface, Rect
 from pygame.font import Font
 from code.EntityMediator import EntityMediator
+from code.DBProxy import DBProxy
 
 
 class Level:
@@ -16,6 +16,8 @@ class Level:
         self.name = name
         self.game_mode = game_mode
         self.entity_list: list[Entity] = EntityFactory.get_entity("Fase_1")
+        self.db = DBProxy()  # Inicializar banco de dados
+
 
         # Inicializar jogadores com base no modo de jogo
         self.player1 = Player("player1", (10, WIN_HEIGHT / 2), controls={
@@ -24,10 +26,10 @@ class Level:
             'left': pygame.K_a,
             'right': pygame.K_d
         })
-        self.player1_score = 0  # Inicializar score do Player 1
+        self.player1_score = 0  # Score do Player 1
 
-        self.player2 = None  # Somente criado no modo competitivo
-        self.player2_score = 0  # Inicializar score do Player 2
+        self.player2 = None  # Criar no modo competitivo
+        self.player2_score = 0  # Score do Player 2
         if self.game_mode == "NEW GAME 2P":
             self.player2 = Player("player2", (10, WIN_HEIGHT / 2.6), controls={
                 'up': pygame.K_UP,
@@ -36,17 +38,72 @@ class Level:
                 'right': pygame.K_RIGHT
             })
 
-        # Inicializar inimigos usando a fábrica
+        # Inimigos
         self.enemies = EntityFactory.get_entity("Enemies")
 
     def update_score(self, player, target):
         """Atualiza o score do jogador ao destruir um inimigo."""
         normalized_name = target.name.capitalize()
-        points = entity_Score.get(normalized_name, 0)
+        points = entity_Score.get(normalized_name, 0)  # Pontuação baseada no inimigo
         if player == "player1":
             self.player1_score += points
         elif player == "player2":
             self.player2_score += points
+
+    def end_game_screen(self, message, players_scores):
+        """Exibe a tela final (vitória ou derrota) e solicita os nomes."""
+        running = True
+        font = pygame.font.SysFont("Lucida Sans Typewriter", 30)
+        input_boxes = []  # Campos para entrada de nomes
+        names = []  # Armazena os nomes inseridos
+
+        for i, player in enumerate(players_scores.keys()):
+            rect = pygame.Rect(WIN_WIDTH // 2 - 100, WIN_HEIGHT // 2 + i * 50, 200, 30)
+            input_boxes.append({"rect": rect, "text": "", "active": False})
+
+        while running:
+            self.window.fill((0, 0, 0))
+
+            # Exibe a mensagem de vitória ou derrota
+            title_surf = font.render(message, True, COLOR_WHITE)
+            title_rect = title_surf.get_rect(center=(WIN_WIDTH // 2, WIN_HEIGHT // 4))
+            self.window.blit(title_surf, title_rect)
+
+            # Exibe os campos para nomes
+            for i, box in enumerate(input_boxes):
+                label = f"{list(players_scores.keys())[i]}: {box['text']}"
+                text = font.render(label, True, COLOR_WHITE)
+                pygame.draw.rect(self.window, COLOR_WHITE if box["active"] else (100, 100, 100), box["rect"], 2)
+                self.window.blit(text, (box["rect"].x + 5, box["rect"].y + 5))
+
+            pygame.display.flip()
+
+            for event in pygame.event.get():
+                if event.type == pygame.QUIT:
+                    pygame.quit()
+                    return "quit"
+
+                if event.type == pygame.KEYDOWN:
+                    if event.key == pygame.K_RETURN:
+                        for i, box in enumerate(input_boxes):
+                            names.append(box["text"])
+                            self.db.add_score(box["text"], list(players_scores.values())[i])
+                        return "menu"
+
+                    if event.key == pygame.K_BACKSPACE:
+                        for box in input_boxes:
+                            if box["active"]:
+                                box["text"] = box["text"][:-1]
+                    else:
+                        for box in input_boxes:
+                            if box["active"]:
+                                box["text"] += event.unicode
+
+                if event.type == pygame.MOUSEBUTTONDOWN:
+                    for box in input_boxes:
+                        box["active"] = box["rect"].collidepoint(event.pos)
+
+        return "menu"
 
     def run(self, start_time=1):
         """Loop principal do nível."""
@@ -66,8 +123,12 @@ class Level:
             remaining_time = max(0, self.timeout / 1000 - elapsed_time)
 
             if remaining_time <= 0:
-                return "time_over"
+                players_scores = {"Player 1": self.player1_score}
+                if self.player2:
+                    players_scores["Player 2"] = self.player2_score
+                return self.end_game_screen("YOU WIN!", players_scores)
 
+            # Atualizar e renderizar entidades
             for ent in self.entity_list:
                 ent.move()
                 self.window.blit(ent.surf, ent.rect)
@@ -109,7 +170,6 @@ class Level:
                     shot.move()
                     self.window.blit(shot.surf, shot.rect)
 
-            # Exibir informações do nível e jogadores
             self._render_text(16, f"Level 1 - Timeout: {remaining_time:.1f}s", COLOR_WHITE, (10, 10))
             self._render_text(16, f"Player 1 - Health: {self.player1.health} | Score: {self.player1_score}",
                               COLOR_VIVIDSKYBLUE, (10, 25))
@@ -136,14 +196,8 @@ class Level:
 
         return "exit"
 
-    def _render_text(self , size: int , text: str , color: tuple , position: tuple):
-        """Renderiza texto na tela com validação de posição."""
-        # Verificar se as coordenadas estão dentro dos limites da tela
-        if position[0] < 0 or position[1] < 0 or position[0] > WIN_WIDTH or position[1] > WIN_HEIGHT:
-            print(f"[ERROR] Invalid position for text: {position}")
-            return
-
-        font: Font = pygame.font.SysFont("Lucida Sans Typewriter" , size)
-        text_surf: Surface = font.render(text , True , color).convert_alpha()
-        text_rect: Rect = text_surf.get_rect(left=position[0] , top=position[1])
-        self.window.blit(text_surf , text_rect)
+    def _render_text(self, size: int, text: str, color: tuple, position: tuple):
+        font: Font = pygame.font.SysFont("Lucida Sans Typewriter", size)
+        text_surf: Surface = font.render(text, True, color).convert_alpha()
+        text_rect: Rect = text_surf.get_rect(left=position[0], top=position[1])
+        self.window.blit(text_surf, text_rect)

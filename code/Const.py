@@ -76,4 +76,4 @@ entity_Score = {
 
 # Opcoes de Timed
 TIMEOUT_STEP = 100  # 100ms
-TIMEOUT_LEVEL = 20000  # 20s
+TIMEOUT_LEVEL = 10000  # 20s

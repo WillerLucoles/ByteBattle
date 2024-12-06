@@ -28,7 +28,7 @@ class DBProxy:
 
     def get_scores(self):
         """Retorna todos os scores, ordenados por pontuação (decrescente)."""
-        self.cursor.execute("SELECT player, score, date FROM scores ORDER BY score DESC")
+        self.cursor.execute("SELECT player, score, date FROM scores ORDER BY score DESC LIMIT 10")
         return self.cursor.fetchall()
 
     def clear_scores(self):
