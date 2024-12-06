@@ -15,18 +15,18 @@ class Score:
         running = True
 
         while running:
-            self.window.fill((0, 0, 0))  # Fundo preto
+            self.window.fill((0, 0, 0))
 
-            # Título "SCORE"
+
             title_surf = self.font_title.render("SCORE", True, COLOR_WHITE)
             title_rect = title_surf.get_rect(center=(WIN_WIDTH // 2, 50))
             self.window.blit(title_surf, title_rect)
 
             # Carregar scores do banco
-            scores = self.db.get_scores()  # Retorna uma lista de (player, score, date)
+            scores = self.db.get_scores()
             y_offset = 120
 
-            # Exibir scores
+
             for player, score, _ in scores:
                 player_text = self.font_text.render(f"{player}", True, COLOR_WHITE)
                 score_text = self.font_text.render(f"{score}", True, COLOR_WHITE)
@@ -49,4 +49,4 @@ class Score:
 
                 if event.type == pygame.KEYDOWN:
                     if event.key == pygame.K_ESCAPE:
-                        return "menu"  # Voltar ao menu principal
+                        return "menu"

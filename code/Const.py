@@ -1,4 +1,4 @@
-# Cores usadas no jogo
+
 from typing import Dict , Any
 
 COLOR_VIVIDSKYBLUE = (85, 205, 241)
@@ -13,7 +13,7 @@ MENU_OPTION = ('NEW GAME 1P', 'NEW GAME 2P', 'SCORE', 'EXIT')
 
 # Dimensões da janela do jogo
 WIN_WIDTH = 576
-WIN_HEIGHT = 354
+WIN_HEIGHT = 330
 WIN_CENTER = (WIN_WIDTH // 2, WIN_HEIGHT // 2)
 
 # Fontes padrão
@@ -76,4 +76,4 @@ entity_Score = {
 
 # Opcoes de Timed
 TIMEOUT_STEP = 100  # 100ms
-TIMEOUT_LEVEL = 10000  # 20s
+TIMEOUT_LEVEL = 40000  # 40s

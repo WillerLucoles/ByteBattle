@@ -27,6 +27,7 @@ class Menu:
         """
         menuOption = 0
         pygame.mixer_music.load(SOUND_MENU)
+        pygame.mixer.music.set_volume(0.1)
         pygame.mixer_music.play(-1)
         while True:
             self.drawMenu(menuOption)
@@ -35,7 +36,7 @@ class Menu:
                 if selectedOption == "SCORE":
                     score_screen = Score(self.window)
                     score_screen.run()
-                    continue  # Retorna ao menu após a tela de scores
+                    continue
                 return selectedOption
 
     def drawMenu(self, menuOption):
@@ -49,7 +50,7 @@ class Menu:
             if i == menuOption:
                 # Draw a black transparent rectangle
                 rectSurf = pygame.Surface((200, 25), pygame.SRCALPHA)
-                rectSurf.fill((0, 0, 0, 128))  # Black with 50% transparency
+                rectSurf.fill((0, 0, 0, 128))
                 rectRect = rectSurf.get_rect(center=(WIN_WIDTH / 2, 200 + 25 * i))
                 self.window.blit(rectSurf, rectRect)
 

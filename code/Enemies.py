@@ -21,12 +21,12 @@ class Enemy(Entity):
 
     def move(self):
         """Move o inimigo horizontalmente e reposiciona se sair da tela."""
-        self.rect.x -= self.speed  # Move para a esquerda
+        self.rect.x -= self.speed
 
         # Reposicionar inimigo
         if self.rect.right < 0:
             self.rect.x = WIN_WIDTH
-            self.rect.y = random.randint(0 , WIN_HEIGHT - self.rect.height)  # Novo Y aleatório
+            self.rect.y = random.randint(0 , WIN_HEIGHT - self.rect.height)
             #print(f"[DEBUG] Enemy repositioned: {self.name} (X: {self.rect.x}, Y: {self.rect.y})")
 
 
@@ -34,8 +34,8 @@ class Enemy(Entity):
     def activate(self):
         """Ativa o inimigo e define nova posição aleatória."""
         self.active = True
-        self.rect.x = 576  # Reaparece à direita da tela
-        self.rect.y = random.randint(0, 354 - self.rect.height)  # Novo Y aleatório
+        self.rect.x = 576
+        self.rect.y = random.randint(0, 354 - self.rect.height)
 
     def deactivate(self):
         """Desativa o inimigo e reinicia o timer."""

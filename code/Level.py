@@ -125,7 +125,7 @@ class Level:
         self.reset_level()
 
         pygame.mixer_music.load('./asset/Backgrounds/Level/SomLevel1.mp3')
-        pygame.mixer_music.set_volume(0.3)
+        pygame.mixer.music.set_volume(0.1)
         pygame.mixer_music.play(-1)
         start_time = pygame.time.get_ticks()
 

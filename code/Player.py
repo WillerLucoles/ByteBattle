@@ -11,7 +11,7 @@ class Player(Entity):
         self.speed = speed
         self.controls = controls
         self.shot_sprite = SHOT_SPRITES.get(name, "Player1Shot")
-        self.shot_direction = 1  # Direção do tiro
+        self.shot_direction = 1
         self.shots = []
         self.shoot_cooldown = 300  # Cadência de tiro em milissegundos
         self.last_shot_time = 0

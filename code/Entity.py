@@ -8,7 +8,7 @@ class Entity(ABC):
     def __init__(self, name: str, position: tuple, path: str = './asset/Backgrounds/Level/'):
         self.name = name
         try:
-            self.surf = pygame.image.load(path + name + '.png')  # Carrega a imagem do caminho especificado
+            self.surf = pygame.image.load(path + name + '.png')
         except pygame.error as e:
             print(f"Error loading image for {name}: {e}")
         self.rect = self.surf.get_rect(left=position[0], top=position[1])
