@@ -10,15 +10,14 @@ class Menu:
     """
     def __init__(self, window):
         self.window = window
-        self.surf = pygame.image.load('../asset/Backgrounds/Bg_Menu.png').convert_alpha()
+        self.surf = pygame.image.load('./asset/Backgrounds/Bg_Menu.png').convert_alpha()
         self.rect = self.surf.get_rect(left=0, top=0)
-        self.logo_surf = pygame.image.load('../asset/Backgrounds/Logo_Menu.png').convert_alpha()
+        self.logo_surf = pygame.image.load('./asset/Backgrounds/Logo_Menu.png').convert_alpha()
 
-        # Resize the logo
+
         self.logo_surf = pygame.transform.scale(self.logo_surf,
                                                 (self.logo_surf.get_width() // 5, self.logo_surf.get_height() // 5))
 
-        # Center the logo horizontally and position it 30px from the top
         self.logo_rect = self.logo_surf.get_rect(center=(WIN_WIDTH / 2, self.logo_surf.get_height() / 2 + 30))
 
     def run(self):
@@ -35,9 +34,7 @@ class Menu:
                 return selectedOption
 
     def drawMenu(self, menuOption):
-        """
-        Draw the menu options on the screen.
-        """
+
         self.window.blit(self.surf, self.rect)
 
         # Draw the logo instead of "Byte Battle" text

@@ -7,7 +7,7 @@ from code.Shots import Shot
 
 class Enemy(Entity):
     def __init__(self, name: str, position: tuple, speed: int = 5, health: int = 100):
-        super().__init__(name, position, path='../asset/Enemies/')
+        super().__init__(name, position, path='./asset/Enemies/')
         self.speed = speed
         self.health = ENTITY_HEALTH.get(name, 50)
         self.active = False

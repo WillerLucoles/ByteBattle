@@ -5,7 +5,7 @@ from code.Const import ENTITY_SPEED , ENTITY_HEALTH
 
 
 class Entity(ABC):
-    def __init__(self, name: str, position: tuple, path: str = '../asset/Backgrounds/Level/'):
+    def __init__(self, name: str, position: tuple, path: str = './asset/Backgrounds/Level/'):
         self.name = name
         try:
             self.surf = pygame.image.load(path + name + '.png')  # Carrega a imagem do caminho especificado

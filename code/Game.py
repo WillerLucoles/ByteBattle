@@ -2,6 +2,7 @@ import pygame
 from code.Const import WIN_WIDTH, WIN_HEIGHT, MENU_OPTION
 from code.Menu import Menu
 from code.Level import Level
+from code.Score import Score
 
 
 class Game:
@@ -25,6 +26,7 @@ class Game:
     def run(self):
         while True:
             print("Entering menu...")
+            score= Score(self.window)
             menu = Menu(self.window)
             menu_return = menu.run()
             print(f"Menu option selected: {menu_return}")  # Verifica qual opção foi escolhida
@@ -34,7 +36,7 @@ class Game:
 
                 try:
                     level = Level(self.window, "Level 1", menu_return)
-                    print(f"Level initialized: {level}")  # Confirma se o nível foi instanciado
+                    print(f"Level initialized: {level}")
                 except Exception as e:
                     print(f"Error initializing level: {e}")
 
@@ -43,7 +45,7 @@ class Game:
                 if level_return == "quit":
                     break
 
-                if level_return == "menu":  # Se a opção for "Cancel", volta para o menu
+                if level_return == "menu":
                     print("Returning to main menu...")
                     continue
 

@@ -22,7 +22,7 @@ FONT_SIZE_LARGE = 20
 FONT_SIZE_SMALL = 12
 
 # Sons do jogo
-SOUND_MENU = "../asset/Backgrounds/Bg_Menu_Sound.mp3"
+SOUND_MENU = "./asset/Backgrounds/Bg_Menu_Sound.mp3"
 
 #Background do Level1
 ENTITY_SPEED = {

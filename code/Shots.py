@@ -3,7 +3,7 @@ from code.Entity import Entity
 
 
 class Shot(Entity):
-    def __init__(self, name: str, position: tuple, speed: int, direction: int, path: str = '../asset/Shots/'):
+    def __init__(self, name: str, position: tuple, speed: int, direction: int, path: str = './asset/Shots/'):
         """
         Cria um tiro no jogo.
         :param name: Nome do sprite do tiro.

@@ -7,7 +7,7 @@ from code.Shots import Shot
 
 class Player(Entity):
     def __init__(self, name: str, position: tuple, controls: dict, speed: int = 5):
-        super().__init__(name, position, path='../asset/Players/')
+        super().__init__(name, position, path='./asset/Players/')
         self.speed = speed
         self.controls = controls
         self.shot_sprite = SHOT_SPRITES.get(name, "Player1Shot")
